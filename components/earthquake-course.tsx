@@ -90,6 +90,12 @@ export default function EarthquakeCourse({
                 preload
                 alt=""
               />
+              <Button
+                variant={"secondary"}
+                className="absolute z-10 font-doto font-extrabold top-1/2 left-1/2 -translate-1/2"
+              >
+                Play
+              </Button>
             </DialogHeader>
           </Link>
 
@@ -182,12 +188,26 @@ export default function EarthquakeCourse({
           {earthquakeCourse.map((item, idx) => (
             <div
               key={idx}
-              className="rounded-2xl border bg-card p-6 shadow-sm hover:shadow-md transition-shadow bg-linear-to-b from-accent to-transparent"
+              className="border bg-card p-6 shadow-sm hover:shadow-md transition-shadow bg-linear-to-b from-accent to-transparent"
             >
               <p className="text-lg font-bold mb-4">
                 Q{idx + 1}. {item.question}
               </p>
-
+              <div className="flex justify-end items-center">
+                <Button
+                  onClick={() => {
+                    setAnswers((prev) => {
+                      const copy = [...prev];
+                      copy[idx] = undefined;
+                      return copy;
+                    });
+                  }}
+                  variant={"link"}
+                  className="text-xs text-muted-foreground"
+                >
+                  Clear answer
+                </Button>
+              </div>
               <RadioGroup
                 className="grid gap-3"
                 onValueChange={(value) => {
@@ -197,12 +217,13 @@ export default function EarthquakeCourse({
                     return copy;
                   });
                 }}
+                value={`${answers[idx]}` || ""}
               >
                 {item.options.map((option, optionIdx) => (
                   <label
                     key={optionIdx}
                     htmlFor={`${option}-${idx}`}
-                    className="flex items-center gap-3 rounded-lg border px-4 py-3 cursor-pointer hover:bg-muted transition"
+                    className="flex items-center gap-3 border px-4 py-3 cursor-pointer hover:bg-muted transition"
                   >
                     <RadioGroupItem
                       value={option}

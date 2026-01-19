@@ -25,9 +25,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const description = "A donut chart";
-export default function FireCourse({userId} : {
-  userId : string | undefined
-}) {
+export default function FireCourse({ userId }: { userId: string | undefined }) {
   const questions = fireCourse.map((item) => item.question);
   const real_answers = fireCourse.map((item) => item.answer);
   const [answers, setAnswers] = useState(
@@ -80,12 +78,13 @@ export default function FireCourse({userId} : {
           </DialogTitle>
           <Link href={`/game/fire/?id=${userId}`}>
             <DialogHeader className="aspect-video relative">
-              <Image
-                src={"/assets/backgrounds/fire.png"}
-                fill
-                preload
-                alt=""
-              />
+              <Image src={"/assets/backgrounds/fire.png"} fill preload alt="" />
+              <Button
+                variant={"secondary"}
+                className="absolute z-10 font-doto font-extrabold top-1/2 left-1/2 -translate-1/2"
+              >
+                Play
+              </Button>
             </DialogHeader>
           </Link>
           <ChartContainer
@@ -119,7 +118,7 @@ export default function FireCourse({userId} : {
                 {answer ? (
                   <Badge
                     variant={"outline"}
-                    className={`${answer == real_answers[idx] ? "bg-emerald-200 text-background border-emerald-600" : "bg-red-200 text-background border-red-500"}`}
+                    className={`${answer == real_answers[idx] ? "bg-emerald-200 text-emerald-600 border-emerald-600" : "bg-red-200 text-red-500 border-red-500"}`}
                   >
                     <p>Your answer : {`${answer}`}</p>
                   </Badge>
@@ -178,12 +177,26 @@ export default function FireCourse({userId} : {
           {fireCourse.map((item, idx) => (
             <div
               key={idx}
-              className="rounded-2xl border bg-card p-6 shadow-sm hover:shadow-md transition-shadow bg-linear-to-b from-accent to-transparent"
+              className="border bg-card p-6 shadow-sm hover:shadow-md transition-shadow bg-linear-to-b from-accent to-transparent"
             >
               <p className="text-lg font-bold mb-4">
                 Q{idx + 1}. {item.question}
               </p>
-
+              <div className="flex justify-end items-center">
+                <Button
+                  onClick={() => {
+                    setAnswers((prev) => {
+                      const copy = [...prev];
+                      copy[idx] = undefined;
+                      return copy;
+                    });
+                  }}
+                  variant={"link"}
+                  className="text-xs text-muted-foreground"
+                >
+                  Clear answer
+                </Button>
+              </div>
               <RadioGroup
                 className="grid gap-3"
                 onValueChange={(value) => {
@@ -193,18 +206,20 @@ export default function FireCourse({userId} : {
                     return copy;
                   });
                 }}
+                value={`${answers[idx]}` || ""}
               >
                 {item.options.map((option, optionIdx) => (
                   <label
                     key={optionIdx}
                     htmlFor={`${option}-${idx}`}
-                    className="flex items-center gap-3 rounded-lg border px-4 py-3 cursor-pointer hover:bg-muted transition"
+                    className="flex items-center gap-3 border px-4 py-3 cursor-pointer hover:bg-muted transition"
                   >
                     <RadioGroupItem
                       value={option}
                       id={`${option}-${idx}`}
-                      className="border-foreground"
+                      className="border-foreground data-[state=checked]:bg-blue-500!"
                     />
+
                     <span className="text-sm">{option}</span>
                   </label>
                 ))}

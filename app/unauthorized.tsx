@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function Unauthorized() {
   return (
     <>
-      <section className="section">
+      <section className="section pt-32!">
         <div className="min-h-[calc(100vh-5rem)] flex flex-col lg:flex-row justify-between items-center">
           <div className="w-full">
             <div className="flex flex-col justify-center items-start gap-4">
