@@ -24,8 +24,13 @@ import Autoplay from "embla-carousel-autoplay";
 import { User } from "next-auth";
 import { Spinner } from "./ui/spinner";
 import { Suspense } from "react";
+import useIsMobile from "@/lib/mobile-hook";
+import Mobile from "@/components/mobile";
 
 export default function Home({ user }: { user: User | null }) {
+  const isMobile = useIsMobile();
+  if (isMobile) return <Mobile />;
+
   return (
     <>
       <section
@@ -66,7 +71,10 @@ export default function Home({ user }: { user: User | null }) {
                   smooth={true}
                   duration={150}
                 >
-                  <Button className="rounded-none text-xs font-extrabold group" disabled={!user}>
+                  <Button
+                    className="rounded-none text-xs font-extrabold group"
+                    disabled={!user}
+                  >
                     Start Now{" "}
                     <ChevronRight
                       className="group-hover:animate-pulse"
@@ -91,10 +99,11 @@ export default function Home({ user }: { user: User | null }) {
                 className="flex flex-col justify-center items-center gap-0.5 min-w-25 max-w-30 group"
                 key={technology.title}
               >
-                <div className="size-8 aspect-square relative group-hover:animate-pulse">
+                <div className="size-8 aspect-square relative">
+                  <span className="absolute w-full h-full rounded-full bg-blue-300 top-0 left-0 hidden group-hover:flex group-hover:animate-ping transition-all bg-blend-multiply" />
                   <Image src={`${technology.src}`} fill preload alt="" />
                 </div>
-                <p className="text-muted-foreground text-xs text-wrap group-hover:animate-pulse">
+                <p className="text-muted-foreground text-xs text-wrap">
                   {technology.title}
                 </p>
               </div>
@@ -173,119 +182,153 @@ export default function Home({ user }: { user: User | null }) {
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full gap-4">
-              <Link href={`/course/flood/?id=${user?.id}`}>
-                <Card className="hover:border-emerald-600 group h-full">
-                  <CardHeader>
-                    <div className="w-full aspect-video relative">
-                      <Image
-                        src={"/assets/backgrounds/flood.png"}
-                        fill
-                        preload
-                        alt=""
-                      />
-                    </div>
-                    <CardTitle className="text-emerald-600 font-extrabold text-xl font-doto">
-                      Flood Prepardness
-                    </CardTitle>
-                  </CardHeader>
+              {user && (
+                <>
+                  <Link href={`/course/flood/?id=${user?.id}`}>
+                    <Card className="hover:border-emerald-600 group h-full">
+                      <CardHeader>
+                        <div className="w-full aspect-video relative">
+                          <Image
+                            src={"/assets/backgrounds/flood.png"}
+                            fill
+                            preload
+                            alt=""
+                          />
+                        </div>
+                        <CardTitle className="text-emerald-600 font-extrabold text-xl font-doto">
+                          Flood Prepardness
+                        </CardTitle>
+                      </CardHeader>
 
-                  <CardContent>
-                    <p className="text-xs text-muted-foreground">
-                      Learn how to respond quickly and safely during flood
-                      situations. This course covers essential precautions,
-                      evacuation steps, and post-flood safety measures to help
-                      you reduce risk and protect yourself and others.
-                    </p>
-                  </CardContent>
+                      <CardContent>
+                        <p className="text-xs text-muted-foreground">
+                          Learn how to respond quickly and safely during flood
+                          situations. This course covers essential precautions,
+                          evacuation steps, and post-flood safety measures to
+                          help you reduce risk and protect yourself and others.
+                        </p>
+                      </CardContent>
 
-                  <CardFooter>
-                    <div className="group-hover:border-b border-emerald-600 text-xs text-emerald-600 font-semibold flex justify-start gap-2 items-center">
-                      View More{" "}
-                      <ChevronRight
-                        size={12}
-                        strokeWidth={6}
-                        className="group-hover:animate-pulse"
-                      />
-                    </div>
-                  </CardFooter>
-                </Card>
-              </Link>
+                      <CardFooter>
+                        <div className="group-hover:border-b border-emerald-600 text-xs text-emerald-600 font-semibold flex justify-start gap-2 items-center">
+                          View More{" "}
+                          <ChevronRight
+                            size={12}
+                            strokeWidth={6}
+                            className="group-hover:animate-pulse"
+                          />
+                        </div>
+                      </CardFooter>
+                    </Card>
+                  </Link>
 
-              <Link href={`/course/earthquake/?id=${user?.id}`}>
-                <Card className="hover:border-emerald-600 group h-full">
-                  <CardHeader>
-                    <div className="w-full aspect-video relative">
-                      <Image
-                        src={"/assets/backgrounds/earthquake.png"}
-                        fill
-                        preload
-                        alt=""
-                      />
-                    </div>
-                    <CardTitle className="text-emerald-600 font-extrabold text-xl font-doto">
-                      Earthquake Prepardness
-                    </CardTitle>
-                  </CardHeader>
+                  <Link href={`/course/earthquake/?id=${user?.id}`}>
+                    <Card className="hover:border-emerald-600 group h-full">
+                      <CardHeader>
+                        <div className="w-full aspect-video relative">
+                          <Image
+                            src={"/assets/backgrounds/earthquake.png"}
+                            fill
+                            preload
+                            alt=""
+                          />
+                        </div>
+                        <CardTitle className="text-emerald-600 font-extrabold text-xl font-doto">
+                          Earthquake Prepardness
+                        </CardTitle>
+                      </CardHeader>
 
-                  <CardContent>
-                    <p className="text-xs text-muted-foreground">
-                      Understand how to act during fire emergencies with
-                      confidence. Learn safe evacuation techniques, how to avoid
-                      smoke and hazards, and the correct steps to take after
-                      escaping a fire.
-                    </p>
-                  </CardContent>
+                      <CardContent>
+                        <p className="text-xs text-muted-foreground">
+                          Understand how to act during fire emergencies with
+                          confidence. Learn safe evacuation techniques, how to
+                          avoid smoke and hazards, and the correct steps to take
+                          after escaping a fire.
+                        </p>
+                      </CardContent>
 
-                  <CardFooter>
-                    <div className="group-hover:border-b border-emerald-600 text-xs text-emerald-600 font-semibold flex justify-start gap-2 items-center">
-                      View More{" "}
-                      <ChevronRight
-                        size={12}
-                        strokeWidth={6}
-                        className="group-hover:animate-pulse"
-                      />
-                    </div>
-                  </CardFooter>
-                </Card>
-              </Link>
+                      <CardFooter>
+                        <div className="group-hover:border-b border-emerald-600 text-xs text-emerald-600 font-semibold flex justify-start gap-2 items-center">
+                          View More{" "}
+                          <ChevronRight
+                            size={12}
+                            strokeWidth={6}
+                            className="group-hover:animate-pulse"
+                          />
+                        </div>
+                      </CardFooter>
+                    </Card>
+                  </Link>
 
-              <Link href={`/course/fire/?id=${user?.id}`}>
-                <Card className="hover:border-emerald-600 group h-full">
-                  <CardHeader>
-                    <div className="w-full aspect-video relative">
-                      <Image
-                        src={"/assets/backgrounds/fire.png"}
-                        fill
-                        preload
-                        alt=""
-                      />
-                    </div>
-                    <CardTitle className="text-emerald-600 font-extrabold text-xl font-doto">
-                      Fire Prepardness
-                    </CardTitle>
-                  </CardHeader>
+                  <Link href={`/course/fire/?id=${user?.id}`}>
+                    <Card className="hover:border-emerald-600 group h-full">
+                      <CardHeader>
+                        <div className="w-full aspect-video relative">
+                          <Image
+                            src={"/assets/backgrounds/fire.png"}
+                            fill
+                            preload
+                            alt=""
+                          />
+                        </div>
+                        <CardTitle className="text-emerald-600 font-extrabold text-xl font-doto">
+                          Fire Prepardness
+                        </CardTitle>
+                      </CardHeader>
 
-                  <CardContent>
-                    <p className="text-xs text-muted-foreground">
-                      Understand how to act during fire emergencies with
-                      confidence. Learn safe evacuation techniques, how to avoid
-                      smoke and hazards, and the correct steps to take after
-                      escaping a fire.
-                    </p>
-                  </CardContent>
+                      <CardContent>
+                        <p className="text-xs text-muted-foreground">
+                          Understand how to act during fire emergencies with
+                          confidence. Learn safe evacuation techniques, how to
+                          avoid smoke and hazards, and the correct steps to take
+                          after escaping a fire.
+                        </p>
+                      </CardContent>
 
-                  <CardFooter>
-                    <div className="group-hover:border-b border-emerald-600 text-xs text-emerald-600 font-semibold flex justify-start gap-2 items-center">
-                      View More{" "}
-                      <ChevronRight
-                        size={12}
-                        strokeWidth={6}
-                        className="group-hover:animate-pulse"
-                      />
-                    </div>
-                  </CardFooter>
-                </Card>
-              </Link>
+                      <CardFooter>
+                        <div className="group-hover:border-b border-emerald-600 text-xs text-emerald-600 font-semibold flex justify-start gap-2 items-center">
+                          View More{" "}
+                          <ChevronRight
+                            size={12}
+                            strokeWidth={6}
+                            className="group-hover:animate-pulse"
+                          />
+                        </div>
+                      </CardFooter>
+                    </Card>
+                  </Link>
+                </>
+              )}
+
+              {!user && (
+                <>
+                  <Card className="hover:border-emerald-600 group h-full col-span-full relative overflow-clip">
+                    <div className="absolute w-full h-full top-0 left-0 bg-background/40" />
+                    <CardHeader>
+                      {/* <div className="w-full aspect-video relative">
+                        <Image
+                          src={"/assets/backgrounds/flood.png"}
+                          fill
+                          preload
+                          alt=""
+                        />
+                      </div> */}
+                      <CardTitle className="text-emerald-600 font-extrabold text-xl font-doto">
+                        Please register to continue
+                      </CardTitle>
+                    </CardHeader>
+
+                    <CardContent>
+                      <p className="text-xs text-muted-foreground max-w-2xl">
+                        Please register to continue. In order to access our
+                        courses and learning materials, you need to create an
+                        account. Registration helps us track your progress and
+                        provide you with a personalized learning experience.
+                      </p>
+                    </CardContent>
+                  </Card>
+                </>
+              )}
             </div>
           </div>
         </section>

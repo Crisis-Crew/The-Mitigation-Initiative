@@ -12,6 +12,11 @@ import { Badge } from "@/components/ui/badge";
 import { Spinner } from "@/components/ui/spinner";
 import { Home } from "lucide-react";
 import Link from "next/link";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default async function Header() {
   const session = await auth();
@@ -19,7 +24,7 @@ export default async function Header() {
     <>
       <header className="absolute w-full lg:px-32 px-8 pt-8 z-10">
         <div className="flex justify-between items-center">
-          <Badge variant={"secondary"} className="pl-0 pr-4">
+          <Badge variant={"secondary"} className="pl-0 pr-0 lg:pr-4">
             <div className="flex flex-wrap justify-start items-center">
               <div className="w-18 aspect-square rounded-full relative">
                 <Image src={"/logo.png"} fill preload alt="Logo" />
@@ -36,11 +41,22 @@ export default async function Header() {
           </Badge>
 
           <div className="flex justify-center items-center gap-2">
-            <Link href={"/"} className="text-muted-foreground">
-              <Button variant={"secondary"} className="px-4 py-2 rounded-full text-sm font-bold">
-                <Home /> Home
-              </Button>
-            </Link>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link href={"/"} className="text-muted-foreground">
+                  <Button
+                    variant={"link"}
+                    className="px-4 py-2 rounded-full text-sm font-bold"
+                  >
+                    <Home />
+                  </Button>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent align="end">
+                Return to Home Page
+              </TooltipContent>
+            </Tooltip>
+
             <Suspense fallback={<Spinner />}>
               {!session ? (
                 <form

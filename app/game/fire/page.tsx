@@ -7,6 +7,7 @@ export default async function Fire({searchParams} : {
     id : string | undefined
   }>
 }){
+
   const session = await auth()
   if (!session) return unauthorized();
 

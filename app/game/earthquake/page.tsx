@@ -1,6 +1,8 @@
 import { auth } from "@/auth";
 import EarthquakeClient from "@/games/earthquake";
 import { unauthorized } from "next/navigation";
+
+
 export default async function Earthquake({
   searchParams,
 }: {
@@ -8,6 +10,7 @@ export default async function Earthquake({
     id: string | undefined;
   }>;
 }) {
+
   const session = await auth();
   if (!session) return unauthorized();
 
